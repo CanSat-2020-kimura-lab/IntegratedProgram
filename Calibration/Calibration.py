@@ -1,6 +1,6 @@
 import sys
-sys.path.append('/home/pi/git/kimuralab/SensormoduleTest/BMX055')
-sys.path.append('/home/pi/git/kimuralab/SensormoduleTest/GPS')
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/BMX055')
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/GPS')
 sys.path.append('/home/pi/git/kimuralab/Detection/Run_phase')
 #--- must be installed module ---#
 import matplotlib.pyplot as plt
@@ -21,9 +21,9 @@ def get_data():
 	#--- get bmx055 data ---#
         try:
                 BMX055.bmx055_setup()
-                time.sleep(0.2)
+                #time.sleep(0.2)
                 bmxData = BMX055.bmx055_read()
-                time.sleep(0.2)
+                #time.sleep(0.2)
 
         except KeyboardInterrupt:
                 print()
@@ -48,15 +48,15 @@ def get_data():
 def magdata_matrix():
         try:
                 get_data()
-                #--- initial GPS.value ---#
+                #--- initial GPS value ---#
                 global magdata
                 magdata = np.array([[magx,magy,magz]])
-                time.sleep(0.5)
+                #time.sleep(0.5)
 
                 #--- use Timer ---#
                 global cond
                 cond = True
-                thread = Thread(target = timer,args=([2]))
+                thread = Thread(target = timer,args=([10]))
                 thread.start()
 
                 while cond:
@@ -65,7 +65,7 @@ def magdata_matrix():
                         get_data()
                         #--- multi dimention matrix ---#
                         magdata = np.append(magdata , np.array([[magx,magy,magz]]) , axis = 0)
-                        time.sleep(0.1)
+                        #time.sleep(0.1)
 
         except KeyboardInterrupt:
                 run = pwm_control.Run()
@@ -73,7 +73,7 @@ def magdata_matrix():
                 
         finally:
                 run = pwm_control.Run()
-                run.stop()   
+                run.stop()
         
         return magdata
 
@@ -102,7 +102,7 @@ def calculate_offset(magdata):
         print("magy_off = "+str(magy_off))
         print("magz_off = "+str(magz_off))
 
-        return magx_array , magy_array , magx_off , magy_off , magz_off
+        return magx_array , magy_array , magz_array , magx_off , magy_off , magz_off
 
 def plot_data_2D(magx_array,magy_array):
         plt.scatter(magx_array,magy_array,label ="Calibration")
@@ -124,6 +124,7 @@ def calculate_angle_2D(magx,magy,magx_off,magy_off):
         #-- North = 0 , θ = (direction of sensor) ---#
         global θ
         θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
+        print(θ)
         return θ
 
 def calculate_angle_3D(accx,accy,accz,magx,magy,magz,magx_off,magy_off,magz_off):
@@ -137,26 +138,7 @@ def calculate_angle_3D(accx,accy,accz,magx,magy,magz,magx_off,magy_off,magz_off)
         θ = math.degrees(math.atan((magz - magz_off)*math.sin(Φ) - (magy - magy_off)*math.cos(Φ))/((magx - magx_off)*math.cos(ψ) + (magy - magy_off)*math.sin(ψ)*math.sin(Φ) +(magz - magz_off)*math.sin(ψ)*math.cos(Φ)))
         return θ
 
-def rotate_control(θ):
-        #--- rover to the North ---#
-        try:
-                while θ != 0:
-                        run = pwm_control.Run()
-                        run.rotation()
-                        #--- calculate θ repeatly ---#
-                        magdata_matrix()
-                        calculate_offset(magdata)
-                        θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
-
-        except KeyboardInterrupt:
-                run = pwm_control.Run()
-                run.stop()
-                print("faulted to rotate control to the North")
-                
-        finally:
-                run = pwm_control.Run()
-                run.stop()
-
+def calculate_direction(lon2,lat2):
         #--- read GPS data ---#
         try:
                 GPS.openGPS()
@@ -174,14 +156,31 @@ def rotate_control(θ):
                 print (traceback.format_exc())
                 
         #--- calculate angle to goal ---#
-        #--- difine goal latitude and longitude ---#
-        lon2 = 139.906
-        lat2 = 35.915
         direction = gps_navigate.vincenty_inverse(lat1,lon1,lat2,lon2)
-        distance = direction["distance"]
-        azimuth1 = direction["azimuth1"]
+        return direction
 
-        print(distance)
+def rotate_control(θ,lon2,lat2):
+        #--- rover control to the North ---#
+        try:
+                while θ != 0:
+                        run = pwm_control.Run()
+                        run.turn_right()
+                        #--- calculate θ repeatly ---#
+                        magdata_matrix()
+                        calculate_offset(magdata)
+                        θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
+
+        except KeyboardInterrupt:
+                run = pwm_control.Run()
+                run.stop()
+                print("faulted to rotate control to the North")
+                
+        finally:
+                run = pwm_control.Run()
+                run.stop()
+
+        direction = calculate_direction(lon2,lat2)
+        azimuth1 = direction["azimuth1"]
 
         try:
                 while θ != azimuth1:
@@ -216,8 +215,15 @@ if __name__ == "__main__":
                 get_data()
                 calculate_angle_2D(magx,magy,magx_off,magy_off)
                 #calculate_angle_3D(accx,accy,accz,magx,magy,magz,magx_off,magy_off,magz_off)
+                print(θ)
+                #--- difine goal latitude and longitude ---#
+                lon2 = 139.906
+                lat2 = 35.915
                 #--- rotate contorol ---#
-                rotate_control(θ)
+                rotate_control(θ,lon2,lat2)
         
-        except:
+        except KeyboardInterrupt:
                 print("ERROR")
+        
+        finally:
+                print("End")
