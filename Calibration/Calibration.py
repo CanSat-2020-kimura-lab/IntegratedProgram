@@ -56,12 +56,12 @@ def magdata_matrix():
                 #--- use Timer ---#
                 global cond
                 cond = True
-                thread = Thread(target = timer,args=([10]))
+                thread = Thread(target = timer,args=([4]))
                 thread.start()
 
                 while cond:
                         run = pwm_control.Run()
-                        run.rotation()
+                        run.turn_right()
                         get_data()
                         #--- multi dimention matrix ---#
                         magdata = np.append(magdata , np.array([[magx,magy,magz]]) , axis = 0)
@@ -121,9 +121,17 @@ def plot_data_3D(magx_array,magy_array,magz_array):
 
 def calculate_angle_2D(magx,magy,magx_off,magy_off):
         #--- recognize rover's direction ---#
-        #-- North = 0 , θ = (direction of sensor) ---#
+        #--- North = 0 , θ = (direction of sensor) ---#
+        #--- -90 <= θ <= 90 ---#
         global θ
         θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
+        if θ >= 0:
+                if magx-magx_off < 0 and magy-magy_off < 0:
+                        θ = θ - 180
+        else:
+                if magx-magx_off < 0 and magy-magy_off > 0:
+                        θ = 180 + θ
+        #--- -180 < θ < 180 ---#
         print(θ)
         return θ
 
@@ -162,7 +170,7 @@ def calculate_direction(lon2,lat2):
 def rotate_control(θ,lon2,lat2):
         #--- rover control to the North ---#
         try:
-                while θ != 0:
+                while -5 < θ < 5:
                         run = pwm_control.Run()
                         run.turn_right()
                         #--- calculate θ repeatly ---#
@@ -183,7 +191,7 @@ def rotate_control(θ,lon2,lat2):
         azimuth1 = direction["azimuth1"]
 
         try:
-                while θ != azimuth1:
+                while azimuth1 - 5 < θ < azimuth1 + 5:
                         run = pwm_control.Run()
                         run.turn_right()
                         time.sleep(0.1)
