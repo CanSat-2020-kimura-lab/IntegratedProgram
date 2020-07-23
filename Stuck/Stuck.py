@@ -101,10 +101,10 @@ def stuck_confirm():
 
         #--- escape detection ---#
         move_judge = cor(accx_data,time_array)
-        return move_judge
+        return move_judge 
 
-def stuck_escape(s):
-        if s >= 0.5:
+def stuck_escape(move_judge):
+        if move_judge >= 0.5:
                 print("Successed to escape")
         else:
                 print("Failed to escape")
@@ -178,6 +178,8 @@ if __name__ == "__main__":
                 location = stuck_detection1()
                 longitude_past = location[0]
                 latitude_past = location[1]
+                print('longitude_past = '+str(longitude_past))
+                print('latitude_passt = '+str(latitude_past))
                 #--- use Timer ---#
                 cond = True
                 thread = Thread(target = timer , args=([10]))
@@ -188,8 +190,9 @@ if __name__ == "__main__":
                                 run = pwm_control.Run()
                                 run.straight_h
                                 distance = stuck_detection2(longitude_past,latitude_past)
-                                if distance != 0:
-                                        break                                        
+                                print('diatance = '+str(distance))
+                                if distance >= 5:
+                                        pass                                        
                                 else:
                                         move_judge = stuck_confirm()
                                         print(move_judge)
