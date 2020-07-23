@@ -208,15 +208,16 @@ def rotate_control(θ,lon2,lat2):
                         cond = True
                         thread = Thread(target = timer,args=([0.5]))
                         thread.start()
-                        while cond:
-                                run = pwm_control.Run()
+                                  while cond:
+                      run = pwm_control.Run()
                                 run.turn_right()
                         get_data()
                         θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
                         print(θ)
+			run = pwm_control.Run()
+                        run.stop()
                         time.sleep(0.5)
                         
-
         except KeyboardInterrupt:
                 run = pwm_control.Run()
                 run.stop()
