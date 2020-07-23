@@ -52,11 +52,11 @@ def magdata_matrix():
                 global magdata
                 magdata = np.array([[magx,magy,magz]])
                 #time.sleep(0.5)
-
+'''
                 #--- use Timer ---#
                 global cond
                 cond = True
-                thread = Thread(target = timer,args=([4]))
+                thread = Thread(target = timer,args=([10]))
                 thread.start()
 
                 while cond:
@@ -66,6 +66,13 @@ def magdata_matrix():
                         #--- multi dimention matrix ---#
                         magdata = np.append(magdata , np.array([[magx,magy,magz]]) , axis = 0)
                         #time.sleep(0.1)
+'''
+                for i in range(10):
+                        run = pwm_control.Run()
+                        run.turn_right()
+                        get_data()
+                        #--- multi dimention matrix ---#
+                        magdata = np.append(magdata , np.array([[magx,magy,magz]]) , axis = 0)
 
         except KeyboardInterrupt:
                 run = pwm_control.Run()
@@ -127,12 +134,13 @@ def calculate_angle_2D(magx,magy,magx_off,magy_off):
         θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
         if θ >= 0:
                 if magx-magx_off < 0 and magy-magy_off < 0:
-                        θ = θ - 180
+                        θ = θ + 180
         else:
                 if magx-magx_off < 0 and magy-magy_off > 0:
                         θ = 180 + θ
-        #--- -180 < θ < 180 ---#
-        print(θ)
+                if magx-magx_off > 0 and magy-magy_off < 0:
+                        θ = 360 + θ
+        #--- 0 < θ < 360 ---#
         return θ
 
 def calculate_angle_3D(accx,accy,accz,magx,magy,magz,magx_off,magy_off,magz_off):
@@ -168,15 +176,18 @@ def calculate_direction(lon2,lat2):
         return direction
 
 def rotate_control(θ,lon2,lat2):
+        '''
         #--- rover control to the North ---#
         try:
                 while -5 < θ < 5:
                         run = pwm_control.Run()
                         run.turn_right()
                         #--- calculate θ repeatly ---#
-                        magdata_matrix()
-                        calculate_offset(magdata)
+                        get_data()
+                        #magdata_matrix()
+                        #calculate_offset(magdata)
                         θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
+                        print(θ)
 
         except KeyboardInterrupt:
                 run = pwm_control.Run()
@@ -186,15 +197,25 @@ def rotate_control(θ,lon2,lat2):
         finally:
                 run = pwm_control.Run()
                 run.stop()
-
+        '''
         direction = calculate_direction(lon2,lat2)
         azimuth1 = direction["azimuth1"]
 
         try:
-                while azimuth1 - 5 < θ < azimuth1 + 5:
-                        run = pwm_control.Run()
-                        run.turn_right()
-                        time.sleep(0.1)
+                while azimuth1 - 15 > θ  or θ > azimuth1 + 15:
+                        #--- use Timer ---#
+                        global cond
+                        cond = True
+                        thread = Thread(target = timer,args=([0.5]))
+                        thread.start()
+                        while cond:
+                                run = pwm_control.Run()
+                                run.turn_right()
+                        get_data()
+                        θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
+                        print(θ)
+                        time.sleep(0.5)
+                        
 
         except KeyboardInterrupt:
                 run = pwm_control.Run()
@@ -215,15 +236,16 @@ if __name__ == "__main__":
                 #--- calculate offset ---#
                 magdata_matrix()        
                 calculate_offset(magdata)
-                time.sleep(1)
+                time.sleep(0.1)
                 #--- plot data ---#
                 plot_data_2D(magx_array,magy_array)
-                plot_data_3D(magx_array,magy_array,magz_array)
+                #plot_data_3D(magx_array,magy_array,magz_array)
+                
                 #--- calculate θ ---#
                 get_data()
                 calculate_angle_2D(magx,magy,magx_off,magy_off)
                 #calculate_angle_3D(accx,accy,accz,magx,magy,magz,magx_off,magy_off,magz_off)
-                print(θ)
+                print('θ='+str(θ))
                 #--- difine goal latitude and longitude ---#
                 lon2 = 139.906
                 lat2 = 35.915
