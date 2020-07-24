@@ -140,6 +140,9 @@ def calculate_angle_2D(magx,magy,magx_off,magy_off):
                         θ = 180 + θ #90 <= θ <= 180
                 if magx-magx_off > 0 and magy-magy_off < 0: #Fourth quadrant
                         θ = 360 + θ #270 <= θ <= 360
+        
+        print('magx-magx_off = '+str(magx-magx_off))
+        print('magy-magy_off = '+str(magy-magy_off))
         #--- 0 <= θ <= 360 ---#
         return θ
 
@@ -176,6 +179,8 @@ def calculate_direction(lon2,lat2):
         return direction
 
 def rotate_control(θ,lon2,lat2):
+        if θ　>= 180:
+                θ　-= 360
         '''
         #--- rover control to the North ---#
         try:
@@ -200,13 +205,15 @@ def rotate_control(θ,lon2,lat2):
         '''
         direction = calculate_direction(lon2,lat2)
         azimuth = direction["azimuth1"]
-        #--- 0 <= azimuth <= 360 
+        #--- 0 <= azimuth <= 360 ---#
+        print('azimuth = '+str(azimuth))
+        print('θ = '+str(θ))
 
         try:
 
                 while azimuth - 15 > θ  or θ > azimuth + 15:
                         if 0 <= azimuth < 15:
-                                if  azimuth -15 + 360 <= θ <= 360:
+                                if azimuth -15 + 360 <= θ <= 360:
                                         break
                         if 345 <= azimuth <= 360:
                                 if 0 <= θ <= azimuth + 15 - 360:
@@ -214,7 +221,7 @@ def rotate_control(θ,lon2,lat2):
                         #--- use Timer ---#
                         global cond
                         cond = True
-                        thread = Thread(target = timer,args=([0.5]))
+                        thread = Thread(target = timer,args=([0.3]))
                         thread.start()
                         while cond:
                                 run = pwm_control.Run()
@@ -257,7 +264,6 @@ if __name__ == "__main__":
                 get_data()
                 calculate_angle_2D(magx,magy,magx_off,magy_off)
                 #calculate_angle_3D(accx,accy,accz,magx,magy,magz,magx_off,magy_off,magz_off)
-                print('θ='+str(θ))
                 #--- difine goal latitude and longitude ---#
                 lon2 = 139.5430
                 lat2 = 35.553
