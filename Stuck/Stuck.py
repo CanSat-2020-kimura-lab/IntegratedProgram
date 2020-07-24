@@ -102,10 +102,11 @@ def stuck_confirm():
 
         #--- escape detection ---#
         move_judge = cor(accx_data,time_array)
+        print(move_judge)
         return move_judge 
 
 def stuck_escape(move_judge):
-        if move_judge >= 0.5:
+        if move_judge <= -0.5:
                 print("Successed to escape")
         else:
                 print("Failed to escape")
@@ -123,12 +124,10 @@ def stuck_escape(move_judge):
                 except KeyboardInterrupt:
                         run = pwm_control.Run()
                         run.stop()
-                        time.sleep(1)
 
                 finally:
                         run = pwm_control.Run()
                         run.stop()
-                        time.sleep(1)
                 #--- use Timer ---#
                 cond = True
                 thread = Thread(target = timer , args=([1]))
@@ -142,12 +141,10 @@ def stuck_escape(move_judge):
                 except KeyboardInterrupt:
                         run = pwm_control.Run()
                         run.stop()
-                        time.sleep(1)
 
                 finally:
                         run = pwm_control.Run()
                         run.stop()
-                        time.sleep(1)
 
 def plot_data(accx_data,time_array):
         plt.scatter(accx_data,time_array,label ="acc-time relation")
