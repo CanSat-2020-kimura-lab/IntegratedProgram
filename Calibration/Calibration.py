@@ -259,8 +259,8 @@ if __name__ == "__main__":
                 #calculate_angle_3D(accx,accy,accz,magx,magy,magz,magx_off,magy_off,magz_off)
                 print('θ='+str(θ))
                 #--- difine goal latitude and longitude ---#
-                lon2 = 139.906
-                lat2 = 35.915
+                lon2 = 139.5430
+                lat2 = 35.553
                 #--- rotate contorol ---#
                 rotate_control(θ,lon2,lat2)
         
