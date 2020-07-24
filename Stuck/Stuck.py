@@ -175,28 +175,31 @@ def timer(t):
 
 if __name__ == "__main__":
         while True:
+                #--- note GPS data first ---#
                 location = stuck_detection1()
                 longitude_past = location[0]
                 latitude_past = location[1]
                 print('longitude_past = '+str(longitude_past))
-                print('latitude_passt = '+str(latitude_past))
-                #--- use Timer ---#
-                cond = True
-                thread = Thread(target = timer , args=([10]))
-                thread.start()
+                print('latitude_past = '+str(latitude_past))
                 try:
+                        #--- use Timer ---#
+                        cond = True
+                        thread = Thread(target = timer , args=([5]))
+                        thread.start()
                         while cond:
-                                #--- run ---#
+                                #--- run 5s ---#
                                 run = pwm_control.Run()
                                 run.straight_h
-                                distance = stuck_detection2(longitude_past,latitude_past)
-                                print('diatance = '+str(distance))
-                                if distance >= 5:
-                                        pass                                        
-                                else:
-                                        move_judge = stuck_confirm()
-                                        print(move_judge)
-                                        stuck_escape(move_judge)
+                        #--- compare GPS data and calcurate distance ---#
+                        distance = stuck_detection2(longitude_past,latitude_past)
+                        print('distance = '+str(distance))
+                        if distance >= 5:
+                                print("rover moved!")                                        
+                        else:
+                                #--- if rover didn't move 5m,carry out stuck cofirm ---#
+                                move_judge = stuck_confirm()
+                                print(move_judge)
+                                stuck_escape(move_judge)
 
                 except KeyboardInterrupt:
                         run = pwm_control.Run()
