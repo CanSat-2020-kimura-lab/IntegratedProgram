@@ -66,11 +66,9 @@ def stop():
 if __name__ == "__main__":
         try:
                 straight_h()
-                #time.sleep(1)
+                time.sleep(1)
         
         except KeyboardInterrupt:
-                stop()
-        '''        
+                stop()      
         finally:
                 stop()
-        '''
