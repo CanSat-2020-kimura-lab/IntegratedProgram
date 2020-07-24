@@ -123,10 +123,12 @@ def stuck_escape(move_judge):
                 except KeyboardInterrupt:
                         run = pwm_control.Run()
                         run.stop()
+                        time.sleep(1)
 
                 finally:
                         run = pwm_control.Run()
                         run.stop()
+                        time.sleep(1)
                 #--- use Timer ---#
                 cond = True
                 thread = Thread(target = timer , args=([1]))
@@ -140,10 +142,12 @@ def stuck_escape(move_judge):
                 except KeyboardInterrupt:
                         run = pwm_control.Run()
                         run.stop()
+                        time.sleep(1)
 
                 finally:
                         run = pwm_control.Run()
                         run.stop()
+                        time.sleep(1)
 
 def plot_data(accx_data,time_array):
         plt.scatter(accx_data,time_array,label ="acc-time relation")
