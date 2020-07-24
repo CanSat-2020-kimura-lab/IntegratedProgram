@@ -1,6 +1,6 @@
 import sys
-sys.path.append('/home/pi/git/kimuralab/SensormoduleTest/BMX055')
-sys.path.append('/home/pi/git/kimuralab/SensormoduleTest/GPS')
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/BMX055')
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/GPS')
 sys.path.append('/home/pi/git/kimuralab/Detection/Run_phase') 
 #--- default module ---#
 import math
@@ -63,6 +63,7 @@ def stuck_detection2(longitude_past,latitude_past):
 
 def stuck_confirm():
         accdata = np.array([[accx,accy,accz]])
+        global cond
         #--- use Timer ---#
         cond = True
         thread = Thread(target = timer , args=([3]))
@@ -110,6 +111,7 @@ def stuck_escape(move_judge):
                 print("Failed to escape")
                 #--- run back and change direction ---#
                 #--- use Timer ---#
+                global cond
                 cond = True
                 thread = Thread(target = timer , args=([2]))
                 thread.start()
