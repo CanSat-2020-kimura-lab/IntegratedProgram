@@ -133,14 +133,14 @@ def calculate_angle_2D(magx,magy,magx_off,magy_off):
         global θ
         θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
         if θ >= 0:
-                if magx-magx_off < 0 and magy-magy_off < 0:
-                        θ = θ + 180
+                if magx-magx_off < 0 and magy-magy_off < 0: #Third quadrant
+                        θ = θ + 180 #180 <= θ <= 270
         else:
-                if magx-magx_off < 0 and magy-magy_off > 0:
-                        θ = 180 + θ
-                if magx-magx_off > 0 and magy-magy_off < 0:
-                        θ = 360 + θ
-        #--- 0 < θ < 360 ---#
+                if magx-magx_off < 0 and magy-magy_off > 0: #Second quadrant
+                        θ = 180 + θ #90 <= θ <= 180
+                if magx-magx_off > 0 and magy-magy_off < 0: #Fourth quadrant
+                        θ = 360 + θ #270 <= θ <= 360
+        #--- 0 <= θ <= 360 ---#
         return θ
 
 def calculate_angle_3D(accx,accy,accz,magx,magy,magz,magx_off,magy_off,magz_off):
@@ -199,25 +199,36 @@ def rotate_control(θ,lon2,lat2):
                 run.stop()
         '''
         direction = calculate_direction(lon2,lat2)
-        azimuth1 = direction["azimuth1"]
+        azimuth = direction["azimuth1"]
+        #--- 0 <= azimuth <= 360 
 
         try:
-                while azimuth1 - 15 > θ  or θ > azimuth1 + 15:
+
+                while azimuth - 15 > θ  or θ > azimuth + 15:
+                        if 0 <= azimuth < 15:
+                                if  azimuth -15 + 360 <= θ <= 360:
+                                        break
+                        if 345 <= azimuth <= 360:
+                                if 0 <= θ <= azimuth + 15 - 360:
+                                        break
                         #--- use Timer ---#
                         global cond
                         cond = True
                         thread = Thread(target = timer,args=([0.5]))
                         thread.start()
-                                  while cond:
-                      run = pwm_control.Run()
+                        while cond:
+                                run = pwm_control.Run()
                                 run.turn_right()
                         get_data()
                         θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
                         print(θ)
-			run = pwm_control.Run()
+                        run = pwm_control.Run()
                         run.stop()
                         time.sleep(0.5)
+                print("end")
+                print(θ)
                         
+
         except KeyboardInterrupt:
                 run = pwm_control.Run()
                 run.stop()
