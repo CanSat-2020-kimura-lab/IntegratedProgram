@@ -52,7 +52,7 @@ def magdata_matrix():
                 global magdata
                 magdata = np.array([[magx,magy,magz]])
                 #time.sleep(0.5)
-'''
+                '''
                 #--- use Timer ---#
                 global cond
                 cond = True
@@ -66,7 +66,7 @@ def magdata_matrix():
                         #--- multi dimention matrix ---#
                         magdata = np.append(magdata , np.array([[magx,magy,magz]]) , axis = 0)
                         #time.sleep(0.1)
-'''
+                '''
                 for i in range(10):
                         run = pwm_control.Run()
                         run.turn_right()
@@ -135,6 +135,8 @@ def calculate_angle_2D(magx,magy,magx_off,magy_off):
         if θ >= 0:
                 if magx-magx_off < 0 and magy-magy_off < 0: #Third quadrant
                         θ = θ + 180 #180 <= θ <= 270
+                if magx-magx_off > 0 and magy-magy_off > 0: #First quadrant
+                        pass #0 <= θ <= 90
         else:
                 if magx-magx_off < 0 and magy-magy_off > 0: #Second quadrant
                         θ = 180 + θ #90 <= θ <= 180
@@ -143,6 +145,7 @@ def calculate_angle_2D(magx,magy,magx_off,magy_off):
         
         print('magx-magx_off = '+str(magx-magx_off))
         print('magy-magy_off = '+str(magy-magy_off))
+        print('calculate:θ = 'θ)
         #--- 0 <= θ <= 360 ---#
         return θ
 
@@ -155,6 +158,18 @@ def calculate_angle_3D(accx,accy,accz,magx,magy,magz,magx_off,magy_off,magz_off)
         #-- North = 0 , θ = (direction of sensor) ---#
         global θ
         θ = math.degrees(math.atan((magz - magz_off)*math.sin(Φ) - (magy - magy_off)*math.cos(Φ))/((magx - magx_off)*math.cos(ψ) + (magy - magy_off)*math.sin(ψ)*math.sin(Φ) +(magz - magz_off)*math.sin(ψ)*math.cos(Φ)))
+        if θ >= 0:
+                if magx-magx_off < 0 and magy-magy_off < 0: #Third quadrant
+                        θ = θ + 180 #180 <= θ <= 270
+        else:
+                if magx-magx_off < 0 and magy-magy_off > 0: #Second quadrant
+                        θ = 180 + θ #90 <= θ <= 180
+                if magx-magx_off > 0 and magy-magy_off < 0: #Fourth quadrant
+                        θ = 360 + θ #270 <= θ <= 360
+        
+        print('magx-magx_off = '+str(magx-magx_off))
+        print('magy-magy_off = '+str(magy-magy_off))
+        print('magz-magz_off = '+str(magz-magz_off))
         return θ
 
 def calculate_direction(lon2,lat2):
@@ -179,8 +194,8 @@ def calculate_direction(lon2,lat2):
         return direction
 
 def rotate_control(θ,lon2,lat2):
-        if θ　>= 180:
-                θ　-= 360
+        if θ >= 180:
+                θ -= 360
         '''
         #--- rover control to the North ---#
         try:
@@ -225,9 +240,19 @@ def rotate_control(θ,lon2,lat2):
                         thread.start()
                         while cond:
                                 run = pwm_control.Run()
-                                run.turn_right()
+                                run.turn_right_l()
                         get_data()
                         θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
+                        if θ >= 0:
+                                if magx-magx_off < 0 and magy-magy_off < 0: #Third quadrant
+                                        θ = θ + 180 #180 <= θ <= 270
+                                if magx-magx_off > 0 and magy-magy_off > 0: #First quadrant
+                                        pass #0 <= θ <= 90
+                        else:
+                                if magx-magx_off < 0 and magy-magy_off > 0: #Second quadrant
+                                        θ = 180 + θ #90 <= θ <= 180
+                                if magx-magx_off > 0 and magy-magy_off < 0: #Fourth quadrant
+                                        θ = 360 + θ #270 <= θ <= 360
                         print(θ)
                         run = pwm_control.Run()
                         run.stop()
@@ -269,9 +294,14 @@ if __name__ == "__main__":
                 lat2 = 35.553
                 #--- rotate contorol ---#
                 rotate_control(θ,lon2,lat2)
+                run = pwm_control.Run()
+                run.straight_h()
+                time.sleep(2)
         
         except KeyboardInterrupt:
                 print("ERROR")
         
         finally:
                 print("End")
+                run = pwm_control.Run()
+                run.stop()
