@@ -52,22 +52,8 @@ def magdata_matrix():
                 global magdata
                 magdata = np.array([[magx,magy,magz]])
                 #time.sleep(0.5)
-'''
-                #--- use Timer ---#
-                global cond
-                cond = True
-                thread = Thread(target = timer,args=([10]))
-                thread.start()
 
-                while cond:
-                        run = pwm_control.Run()
-                        run.turn_right()
-                        get_data()
-                        #--- multi dimention matrix ---#
-                        magdata = np.append(magdata , np.array([[magx,magy,magz]]) , axis = 0)
-                        #time.sleep(0.1)
-'''
-                for i in range(25):
+                for i in range(50):
                         get_data()
                         #--- multi dimention matrix ---#
                         magdata = np.append(magdata , np.array([[magx,magy,magz]]) , axis = 0)
@@ -136,7 +122,13 @@ if __name__ == "__main__":
                 #--- plot data ---#
                 plot_data_2D(magx_array,magy_array)
                 #plot_data_3D(magx_array,magy_array,magz_array)
+        
+        except KeyboardInterrupt:
+                run = pwm_control.Run()
+                run.stop()
+                print("Stop")                
                 
-                #--- calculate θ ---#
-                get_data()
-                calculate_angle_2D(magx,magy,magx_off,magy_off)
+        finally:
+                run = pwm_control.Run()
+                run.stop()
+                print('End')
