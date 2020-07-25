@@ -19,10 +19,8 @@ import GPS
 def get_accdata():
         #--- get bmx055 data ---#
         try:
-                BMX055.bmx055_setup()
-                time.sleep(0.2)
                 bmxData = BMX055.bmx055_read()
-                time.sleep(0.2)
+                #time.sleep(0.2)
 
         except KeyboardInterrupt:
                 print()
@@ -62,6 +60,7 @@ def stuck_detection2(longitude_past,latitude_past):
         return distance 
 
 def stuck_confirm():
+        BMX055.bmx055_setup()
         get_accdata()
         accdata = np.array([[accx,accy,accz]])
         global cond
