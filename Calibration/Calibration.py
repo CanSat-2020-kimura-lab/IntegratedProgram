@@ -20,8 +20,6 @@ import gps_navigate
 def get_data():        
 	#--- get bmx055 data ---#
         try:
-                BMX055.bmx055_setup()
-                #time.sleep(0.2)
                 bmxData = BMX055.bmx055_read()
                 #time.sleep(0.2)
 
@@ -47,6 +45,7 @@ def get_data():
 
 def magdata_matrix():
         try:
+                BMX055.bmx055_setup()
                 get_data()
                 #--- initial GPS value ---#
                 global magdata
