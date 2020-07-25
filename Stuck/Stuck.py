@@ -62,6 +62,7 @@ def stuck_detection2(longitude_past,latitude_past):
         return distance 
 
 def stuck_confirm():
+        get_accdata()
         accdata = np.array([[accx,accy,accz]])
         global cond
         #--- use Timer ---#
@@ -77,7 +78,7 @@ def stuck_confirm():
                 while cond:
                         #--- escape by run faster ---#
                         run = pwm_control.Run()
-                        run.straight_h
+                        run.straight_h()
                         time_count = time.time() - time_base 
                         if time_count >= 0.2:
                                 get_accdata()
