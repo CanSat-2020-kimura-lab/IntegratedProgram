@@ -53,7 +53,7 @@ def magdata_matrix():
                 magdata = np.array([[magx,magy,magz]])
                 #time.sleep(0.5)
 
-                for i in range(50):
+                for i in range(20):
                         get_data()
                         #--- multi dimention matrix ---#
                         magdata = np.append(magdata , np.array([[magx,magy,magz]]) , axis = 0)
