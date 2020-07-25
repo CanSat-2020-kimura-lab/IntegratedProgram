@@ -20,10 +20,8 @@ import gps_navigate
 def get_data():        
 	#--- get bmx055 data ---#
         try:
-                BMX055.bmx055_setup()
-                #time.sleep(0.2)
                 bmxData = BMX055.bmx055_read()
-                #time.sleep(0.2)
+                #time.sleep(0.1)
 
         except KeyboardInterrupt:
                 print()
@@ -47,13 +45,14 @@ def get_data():
 
 def magdata_matrix():
         try:
+                BMX055.bmx055_setup()
                 get_data()
                 #--- initial GPS value ---#
                 global magdata
                 magdata = np.array([[magx,magy,magz]])
-                #time.sleep(0.5)
+                #time.sleep(0.1)
 
-                for i in range(20):
+                for i in range(30):
                         get_data()
                         #--- multi dimention matrix ---#
                         magdata = np.append(magdata , np.array([[magx,magy,magz]]) , axis = 0)
