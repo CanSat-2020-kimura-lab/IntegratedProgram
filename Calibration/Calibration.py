@@ -52,21 +52,6 @@ def magdata_matrix():
                 global magdata
                 magdata = np.array([[magx,magy,magz]])
                 #time.sleep(0.5)
-                '''
-                #--- use Timer ---#
-                global cond
-                cond = True
-                thread = Thread(target = timer,args=([10]))
-                thread.start()
-
-                while cond:
-                        run = pwm_control.Run()
-                        run.turn_right()
-                        get_data()
-                        #--- multi dimention matrix ---#
-                        magdata = np.append(magdata , np.array([[magx,magy,magz]]) , axis = 0)
-                        #time.sleep(0.1)
-                '''
                 for i in range(10):
                         run = pwm_control.Run()
                         run.turn_right()
@@ -145,7 +130,7 @@ def calculate_angle_2D(magx,magy,magx_off,magy_off):
         
         print('magx-magx_off = '+str(magx-magx_off))
         print('magy-magy_off = '+str(magy-magy_off))
-        print('calculate:θ = 'θ)
+        print('calculate:θ = '+str(θ))
         #--- 0 <= θ <= 360 ---#
         return θ
 
@@ -196,28 +181,7 @@ def calculate_direction(lon2,lat2):
 def rotate_control(θ,lon2,lat2):
         if θ >= 180:
                 θ -= 360
-        '''
-        #--- rover control to the North ---#
-        try:
-                while -5 < θ < 5:
-                        run = pwm_control.Run()
-                        run.turn_right()
-                        #--- calculate θ repeatly ---#
-                        get_data()
-                        #magdata_matrix()
-                        #calculate_offset(magdata)
-                        θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
-                        print(θ)
 
-        except KeyboardInterrupt:
-                run = pwm_control.Run()
-                run.stop()
-                print("faulted to rotate control to the North")
-                
-        finally:
-                run = pwm_control.Run()
-                run.stop()
-        '''
         direction = calculate_direction(lon2,lat2)
         azimuth = direction["azimuth1"]
         #--- 0 <= azimuth <= 360 ---#
