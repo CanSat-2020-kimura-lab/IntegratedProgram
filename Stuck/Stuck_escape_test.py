@@ -3,18 +3,10 @@ sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/BMX055')
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/GPS')
 sys.path.append('/home/pi/git/kimuralab/Detection/Run_phase') 
 #--- default module ---#
-import math
 import time
 from threading import Thread
-from statistics import mean, median, variance, stdev
-#--- must be installed module ---#
-import numpy as np
-import matplotlib.pyplot as plt
 #--- original module ---#
-import BMX055
-import gps_navigate
 import pwm_control
-import GPS
 
 def stuck_escape():
 
@@ -33,6 +25,7 @@ def stuck_escape():
         except KeyboardInterrupt:
                 run = pwm_control.Run()
                 run.stop()
+                time.sleep(1)
 
         finally:
                 run = pwm_control.Run()
@@ -51,6 +44,7 @@ def stuck_escape():
         except KeyboardInterrupt:
                 run = pwm_control.Run()
                 run.stop()
+                time.sleep(1)
 
         finally:
                 run = pwm_control.Run()
