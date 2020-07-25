@@ -75,7 +75,7 @@ def stuck_confirm():
                 run.stop()
 
         global accx_data
-        accx_data = accdata[:,0]
+        accx_data = accdata[::3]
 
         #--- escape detection ---#
         move_judge = cor(accx_data,time_array)
