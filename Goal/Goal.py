@@ -22,15 +22,15 @@ if __name__ == "__main__":
 		while 1:
 			if f == 0:
 				#-----------------get information-----------------#
-				Motor.motor(15, 15, 1.0)
-				Motor.motor(0, 0, 1.0)
+				#Motor.motor(15, 15, 1.0)
+				#Motor.motor(0, 0, 1.0)
 				goalFlug, goalArea, goalGAP, photoName = goal_detection.GoalDetection(photopath, H_min, H_max, S_thd, goalthd)
 				print("flug", goalFlug, "area", goalArea, "GAP", goalGAP, "photoname", photoName)
-				f = 1
+				#f = 1
 			#-------------------motor debug-------------------#
 			try:
 				if f == 1:
-					L = float(input("input left value "))
+					#L = float(input("input left value "))
 					f = 2
 				if f == 2:
 					R = float(input("input Right value "))
