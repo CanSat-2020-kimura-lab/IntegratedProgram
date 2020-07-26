@@ -1,5 +1,6 @@
 import sys
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Camera')
+sys.path.append('/home/pi/git/kimuralab/Detection/Run_phase')
 sys.path.append('/home/pi/git/kimuralab/Detection')
 sys.path.append('/home/pi/git/kimuralab/Detection/ParachuteDetection')
 sys.path.append('/home/pi/git/kimuralab/Other')
@@ -8,6 +9,7 @@ import cv2
 import numpy as np
 import Capture
 import ParaDetection
+import pwm_control
 import runtest
 import Other
 
@@ -23,19 +25,19 @@ if __name__ == '__main__':
 	print("START: Parachute avoidance")
 	try:
 		for i in range(2):
-			runtest.run = Run()
-			runtest.run.straight
+			pwm_control.run = Run()
+			pwm_control.run.straight_n()
       
 			flug, area, photoname = ParaDetection.ParaDetection(photo)
 
 			if flug == 1:
-				runtest.run = Run()
-			  runtest.run.back()
+			runtest.run = Run()
+			runtest.run.back()
         
 
 			if flug == 0:
-				runtest.run = Run()
-			  runtest.run.straight()
+			runtest.run = Run()
+			runtest.run.straight_h()
 
 	except KeyboardInterrupt:
 		print("Emergency!")
