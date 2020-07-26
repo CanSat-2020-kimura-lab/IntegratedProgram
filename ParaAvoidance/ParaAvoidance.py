@@ -36,13 +36,13 @@ if __name__ == '__main__':
         
 
 			if flug == 0:
-			runtest.run = Run()
-			runtest.run.straight_h()
+			pwm_control.run = Run()
+			pwm_control.run.straight_h()
 
 	except KeyboardInterrupt:
 		print("Emergency!")
-		runtest.run.stop()
+		pwm_control.run.stop()
 
 	except:
-		runtest.run.stop()
+		pwm_control.run.stop()
 		print(traceback.format_exc())
