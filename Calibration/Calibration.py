@@ -17,6 +17,8 @@ import pwm_control
 import GPS
 import gps_navigate
 
+GPS_data = [0.0,0.0,0.0,0.0,0.0]
+
 def get_data():        
 	#--- get bmx055 data ---#
 	try:
