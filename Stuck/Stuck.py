@@ -16,6 +16,8 @@ import gps_navigate
 import pwm_control
 import GPS
 
+GPS_data = [0.0,0.0,0.0,0.0,0.0]
+
 def stuck_detection1():
 	GPS.openGPS()
 	try:
