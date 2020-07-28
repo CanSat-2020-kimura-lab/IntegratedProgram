@@ -81,6 +81,7 @@ def stuck_escape():
 		run = pwm_control.Run()
 		run.stop()
 		time.sleep(2)
+		print("back")
 
 	try:
 		#--- change direction ---#
@@ -97,6 +98,7 @@ def stuck_escape():
 		run = pwm_control.Run()
 		run.stop()
 		time.sleep(2)
+		print("turn right")
 
 def timer(t):
 	global cond
@@ -104,41 +106,60 @@ def timer(t):
 	cond = False
 
 if __name__ == "__main__":
-	while True:
-		#--- note GPS data first ---#
-		location = stuck_detection1()
-		longitude_past = location[0]
-		latitude_past = location[1]
-		print('longitude_past = '+str(longitude_past))
-		print('latitude_past = '+str(latitude_past))
-		try:
-			#--- use Timer ---#
-			cond = True
-			thread = Thread(target = timer , args=([5]))
-			thread.start()
-			while cond:
-				#--- run 5s ---#
-				run = pwm_control.Run()
-				run.straight_h
+	#--- note GPS data first ---#
+	location = stuck_detection1()
+	longitude_past = location[0]
+	latitude_past = location[1]
+	print('longitude_past = '+str(longitude_past))
+	print('latitude_past = '+str(latitude_past))
+	try:
+		#--- use Timer ---#
+		cond = True
+		thread = Thread(target = timer , args=([5]))
+		thread.start()
+		while cond:
+			#--- run 5s ---#
 			run = pwm_control.Run()
-			run.stop()
-			time.sleep(2)
-			#--- compare GPS data and calcurate distance ---#
-			distance = stuck_detection2(longitude_past,latitude_past)
-			print('distance = '+str(distance))
-			if distance >= 20:
-				print("rover moved!")                                        
-			else:
-				#--- if rover didn't move 5m,carry out stuck cofirm ---#
+			run.straight_h
+		run = pwm_control.Run()
+		run.stop()
+		time.sleep(2)
+		#--- compare GPS data and calcurate distance ---#
+		distance = stuck_detection2(longitude_past,latitude_past)
+		print('distance = '+str(distance))
+		if distance >= 20:
+			print("rover moved!")                                        
+		else:
+			#--- if rover didn't move 5m,carry out stuck cofirm ---#
+			print("stuck escape")
+			try:
 				stuck_escape()
-				print("stuck escape")
+			
+			except KeyboardInterrupt:
+				run = pwm_control.Run()
+				run.stop()
 
-		except KeyboardInterrupt:
-			run = pwm_control.Run()
-			run.stop()
-			break
+			finally:
+				run = pwm_control.Run()
+				run.stop()
+			
+			try:
+				run = pwm_control.Run()
+				run.straight_h()
+				time.sleep(1)
 
-		finally:
-			run = pwm_control.Run()
-			run.stop()
-			break
+			except KeyboardInterrupt:
+				run = pwm_control.Run()
+				run.stop()
+
+			finally:
+				run = pwm_control.Run()
+				run.stop()
+
+	except KeyboardInterrupt:
+		run = pwm_control.Run()
+		run.stop()
+
+	finally:
+		run = pwm_control.Run()
+		run.stop()
