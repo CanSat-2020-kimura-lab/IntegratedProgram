@@ -70,33 +70,33 @@ def stuck_escape():
 		#--- run back ---#
 		run = pwm_control.Run()
 		run.back()
-		time.sleep(1.5)
+		time.sleep(2)
 
 	except KeyboardInterrupt:
 		run = pwm_control.Run()
 		run.stop()
-		time.sleep(1)
+		time.sleep(2)
 
 	finally:
 		run = pwm_control.Run()
 		run.stop()
-		time.sleep(1)
+		time.sleep(2)
 
 	try:
 		#--- change direction ---#
 		run = pwm_control.Run()
 		run.turn_right()
-		time.sleep(0.5)
+		time.sleep(1)
 
 	except KeyboardInterrupt:
 		run = pwm_control.Run()
 		run.stop()
-		time.sleep(1)
+		time.sleep(2)
 
 	finally:
 		run = pwm_control.Run()
 		run.stop()
-		time.sleep(1)
+		time.sleep(2)
 
 def timer(t):
 	global cond
@@ -122,15 +122,16 @@ if __name__ == "__main__":
 				run.straight_h
 			run = pwm_control.Run()
 			run.stop()
-			time.sleep(1)
+			time.sleep(2)
 			#--- compare GPS data and calcurate distance ---#
 			distance = stuck_detection2(longitude_past,latitude_past)
 			print('distance = '+str(distance))
-			if distance >= 5:
+			if distance >= 20:
 				print("rover moved!")                                        
 			else:
 				#--- if rover didn't move 5m,carry out stuck cofirm ---#
 				stuck_escape()
+				print("stuck escape")
 
 		except KeyboardInterrupt:
 			run = pwm_control.Run()
