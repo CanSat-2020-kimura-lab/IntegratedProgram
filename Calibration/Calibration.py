@@ -78,13 +78,13 @@ def calculate_offset(magdata):
 	magz_array = magdata[:,2]
 
 	#--- find maximam GPS value and minimam GPS value respectively ---#
-	magx_max = np.argmax(magx_array)
-	magy_max = np.argmax(magy_array)
-	magz_max = np.argmax(magz_array)
+        magx_max = magx_array[np.argmax(magx_array)]
+	magy_max = magy_array[np.argmax(magy_array)]
+	magz_max = magz_array[np.argmax(magz_array)]
 
-	magx_min = np.argmin(magx_array)
-	magy_min = np.argmin(magy_array)
-	magz_min = np.argmin(magz_array)            
+	magx_min = magx_array[np.argmin(magx_array)]
+	magy_min = magy_array[np.argmin(magy_array)]
+	magz_min = magz_array[np.argmin(magz_array)]    
 	
 	#--- calucurate offset ---#
 	global magx_off , magy_off , magz_off
