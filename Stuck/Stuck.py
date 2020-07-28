@@ -5,6 +5,7 @@ sys.path.append('/home/pi/git/kimuralab/Detection/Run_phase')
 #--- default module ---#
 import math
 import time
+import traceback
 from threading import Thread
 from statistics import mean, median, variance, stdev
 #--- must be installed module ---#
@@ -38,7 +39,6 @@ def stuck_detection1():
 	return longitude_past,latitude_past
 
 def stuck_detection2(longitude_past,latitude_past):
-	GPS.openGPS()
 	try:
 		GPS.openGPS()
 		while True:
@@ -65,40 +65,38 @@ def stuck_detection2(longitude_past,latitude_past):
 
 def stuck_escape():
 	#--- run back and change direction ---#
-	#--- use Timer ---#
-	global cond
-	cond = True
-	thread = Thread(target = timer , args=([2]))
-	thread.start()
+	#--- run back and change direction ---#
 	try:
-		while cond:
-			#--- run back ---#
-			run = pwm_control.Run()
-			run.back()
-	except KeyboardInterrupt:
+		#--- run back ---#
 		run = pwm_control.Run()
-		run.stop()
-
-	finally:
-		run = pwm_control.Run()
-		run.stop()
-	#--- use Timer ---#
-	cond = True
-	thread = Thread(target = timer , args=([1]))
-	thread.start()
-	try:
-		while cond:
-			#--- change direction ---#
-			run = pwm_control.Run()
-			run.turn_right()
+		run.back()
+		time.sleep(1.5)
 
 	except KeyboardInterrupt:
 		run = pwm_control.Run()
 		run.stop()
+		time.sleep(1)
 
 	finally:
 		run = pwm_control.Run()
 		run.stop()
+		time.sleep(1)
+
+	try:
+		#--- change direction ---#
+		run = pwm_control.Run()
+		run.turn_right()
+		time.sleep(0.5)
+
+	except KeyboardInterrupt:
+		run = pwm_control.Run()
+		run.stop()
+		time.sleep(1)
+
+	finally:
+		run = pwm_control.Run()
+		run.stop()
+		time.sleep(1)
 
 def timer(t):
 	global cond
@@ -122,6 +120,9 @@ if __name__ == "__main__":
 				#--- run 5s ---#
 				run = pwm_control.Run()
 				run.straight_h
+			run = pwm_control.Run()
+			run.stop()
+			time.sleep(1)
 			#--- compare GPS data and calcurate distance ---#
 			distance = stuck_detection2(longitude_past,latitude_past)
 			print('distance = '+str(distance))
