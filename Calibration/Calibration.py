@@ -53,12 +53,13 @@ def magdata_matrix():
 		global magdata
 		magdata = np.array([[magx,magy,magz]])
 		#time.sleep(0.5)
-		for i in range(10):
+		for i in range(30):
 			run = pwm_control.Run()
 			run.turn_right()
 			get_data()
 			#--- multi dimention matrix ---#
 			magdata = np.append(magdata , np.array([[magx,magy,magz]]) , axis = 0)
+			time.sleep(0.1)
 
 	except KeyboardInterrupt:
 		run = pwm_control.Run()
