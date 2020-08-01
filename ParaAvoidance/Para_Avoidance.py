@@ -119,5 +119,6 @@ if __name__ == '__main__':
 			run = pwm_control.Run()
 			run.stop()
 			print(traceback.format_exc())
+	print('finish')
 
 #-------  update at 8/2 am1:00 ------#
