@@ -47,9 +47,8 @@ def get_data():
 
 def magdata_matrix():
 	try:
-		BMX055.bmx055_setup()
 		get_data()
-		#--- initial GPS value ---#
+		#--- initialize GPS value ---#
 		global magdata
 		magdata = np.array([[magx,magy,magz]])
 		#time.sleep(0.5)
@@ -85,7 +84,7 @@ def calculate_offset(magdata):
 
 	magx_min = magx_array[np.argmin(magx_array)]
 	magy_min = magy_array[np.argmin(magy_array)]
-	magz_min = magz_array[np.argmin(magz_array)]    
+	magz_min = magz_array[np.argmin(magz_array)]          
 	
 	#--- calucurate offset ---#
 	global magx_off , magy_off , magz_off
@@ -162,8 +161,6 @@ def calculate_angle_3D(accx,accy,accz,magx,magy,magz,magx_off,magy_off,magz_off)
 def calculate_direction(lon2,lat2):
 	#--- read GPS data ---#
 	try:
-		GPS.openGPS()
-
 		while True:
 			GPS_data = GPS.readGPS()
 			lat1 = GPS_data[1]
@@ -211,7 +208,7 @@ def rotate_control(θ,lon2,lat2):
 			#--- use Timer ---#
 			global cond
 			cond = True
-			thread = Thread(target = timer,args=([0.3]))
+			thread = Thread(target = timer,args=([1]))
 			thread.start()
 			while cond:
 				run = pwm_control.Run()
@@ -258,6 +255,8 @@ def timer(t):
 
 if __name__ == "__main__":
 	try:
+		BMX055.bmx055_setup()
+		GPS.openGPS()
 		#--- calculate offset ---#
 		magdata_matrix()        
 		calculate_offset(magdata)
@@ -277,7 +276,7 @@ if __name__ == "__main__":
 		rotate_control(θ,lon2,lat2)
 		run = pwm_control.Run()
 		run.straight_h()
-		time.sleep(2)
+		time.sleep(1)
 	
 	except KeyboardInterrupt:
 		print("ERROR")
@@ -286,3 +285,4 @@ if __name__ == "__main__":
 		print("End")
 		run = pwm_control.Run()
 		run.stop()
+		
