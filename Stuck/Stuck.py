@@ -20,7 +20,6 @@ import GPS
 GPS_data = [0.0,0.0,0.0,0.0,0.0]
 
 def stuck_detection1():
-	GPS.openGPS()
 	try:
 		while True:
 			value = GPS.readGPS()
@@ -40,7 +39,6 @@ def stuck_detection1():
 
 def stuck_detection2(longitude_past,latitude_past):
 	try:
-		GPS.openGPS()
 		while True:
 			value = GPS.readGPS()
 			latitude_new = value[1]
@@ -106,6 +104,7 @@ def timer(t):
 	cond = False
 
 if __name__ == "__main__":
+	GPS.openGPS()
 	#--- note GPS data first ---#
 	location = stuck_detection1()
 	longitude_past = location[0]
@@ -114,13 +113,14 @@ if __name__ == "__main__":
 	print('latitude_past = '+str(latitude_past))
 	try:
 		#--- use Timer ---#
+		global cond
 		cond = True
 		thread = Thread(target = timer , args=([5]))
 		thread.start()
 		while cond:
 			#--- run 5s ---#
 			run = pwm_control.Run()
-			run.straight_h
+			run.straight_h()
 		run = pwm_control.Run()
 		run.stop()
 		time.sleep(2)
