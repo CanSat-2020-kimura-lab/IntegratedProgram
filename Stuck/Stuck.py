@@ -43,9 +43,9 @@ def stuck_detection2(longitude_past,latitude_past):
 			value = GPS.readGPS()
 			latitude_new = value[1]
 			longitude_new = value[2]
-			print(value)
-			print('longitude = '+str(longitude_new))
-			print('latitude = '+str(latitude_new))
+			#print(value)
+			#print('longitude = '+str(longitude_new))
+			#print('latitude = '+str(latitude_new))
 			time.sleep(1)
 			if latitude_new != -1.0 and longitude_new != 0.0 :
 				break
@@ -79,7 +79,7 @@ def stuck_escape():
 		run = pwm_control.Run()
 		run.stop()
 		time.sleep(2)
-		print("back")
+		print("Stuck//back")
 
 	try:
 		#--- change direction ---#
@@ -96,7 +96,7 @@ def stuck_escape():
 		run = pwm_control.Run()
 		run.stop()
 		time.sleep(2)
-		print("turn right")
+		print("Stuck//turn right")
 
 def timer(t):
 	global cond
