@@ -21,7 +21,7 @@ import goaldetection
 #   --- path of photo ---   #
 photo_path = '/home/pi/photo/phto'
 
-pi = pi.pigpio()
+pi = pigpio.pi()
 
 #   --- longitude and latitude of goal ---   #
 #lon_goal = 0
@@ -61,7 +61,7 @@ if __name__ == '__main__':
 		while 1:
 			goalflug = 1
 			while goalflug != 0:
-				goalflug, goalarea, goalGAP, photoname = GoalDetection("/home/pi/photo/photo",200 ,20, 80, 7000)
+				goalflug, goalarea, goalGAP, photoname = goaldetection("/home/pi/photo/photo",200 ,20, 80, 7000)
 				print("goalflug", goalflug, "goalarea",goalarea, "goalGAP", goalGAP, "name", photoname)
 				if goalGAP <= -30.0:
 					print('Turn left')
@@ -86,7 +86,7 @@ if __name__ == '__main__':
 			print('Rover has reached the Goal !')
 
 
-	except KeyboadInterrupt:
+	except KeyboardInterrupt:
 		run = Run()
 		run.stop()
 		print('\r\t except, Run stop')
