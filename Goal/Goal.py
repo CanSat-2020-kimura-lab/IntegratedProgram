@@ -19,7 +19,7 @@ import pwm_control
 import goaldetection
 
 #   --- path of photo ---   #
-photo_path = '/home/pi/photo'
+photo_path = '/home/pi/photo/phto'
 
 pi = pi.pigpio()
 
@@ -58,25 +58,33 @@ if __name__ == '__main__':
 	GPS.openGPS()
 	try:
 		distance = distance_detection(lon_goal,lat_goal)
-		while distance <= 5:
-			Capture.Capture(photo_path,320,240)
-			while color_area <= Thd1:
-				while color_area <= Thd2:
+		while distance <= 5.0:
+			goalflug = 1
+			while goalflug != 0:
+				goalflug, goalarea, goalGAP, photoname = GoalDetection("/home/pi/photo/photo",200 ,20, 80, 7000)
+				print("goalflug", goalflug, "goalarea",goalarea, "goalGAP", goalGAP, "name", photoname)
+				if goalGAP <= -30.0:
+					print('Turn left')
+					run = pwm_control.Run()
+					run.turn_left_l()
+					time.sleep(0.5)
+				
+				elif 30 <= goalGAP:
+					print('Turn right')
 					run = pwm_control.Run()
 					run.turn_right_l()
+					time.sleep(0.5)
+				
+				else:
+					print('Go straight')
+					run = pwm_control.Run()
+					run.straight_h()
 					time.sleep(1.0)
-					Capture.Capture(photo_path340,320,240)
-				run = pwm_control.Run()
-				run.straight_h()
-				time.sleep(2.0)
+				
 			run = pwm_control.Run()
 			run.stop()
-			print('Goal')
+			print('Rover has reached the Goal !')
 
-	except KeyboardInterrupt:
-		run = Run()
-		run.stop()
-		print('\r\t KeyboardInterrupt, Run stop')
 
 	except:
 		run = Run()
