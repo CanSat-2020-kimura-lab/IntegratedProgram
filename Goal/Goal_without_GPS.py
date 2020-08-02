@@ -61,7 +61,7 @@ if __name__ == '__main__':
 		while 1:
 			goalflug = 1
 			while goalflug != 0:
-				goalflug, goalarea, goalGAP, photoname = goaldetection("/home/pi/photo/photo",200 ,20, 80, 7000)
+				goalflug, goalarea, goalGAP, photoname = goaldetection.GoalDetection("/home/pi/photo/photo",200 ,20, 80, 7000)
 				print("goalflug", goalflug, "goalarea",goalarea, "goalGAP", goalGAP, "name", photoname)
 				if goalGAP <= -30.0:
 					print('Turn left')
@@ -87,11 +87,11 @@ if __name__ == '__main__':
 
 
 	except KeyboardInterrupt:
-		run = Run()
+		run = pwm_control.Run()
 		run.stop()
 		print('\r\t except, Run stop')
 
 	finally:
-		run = Run()
+		run = pwm_contrl.Run()
 		run.stop()
 		#GPS.colseGPS()
