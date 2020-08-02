@@ -21,7 +21,7 @@ import goaldetection
 #   --- path of photo ---   #
 photo_path = '/home/pi/photo/phto'
 
-pi = pi.pigpio()
+pi = pigpio.pi()
 
 #   --- longitude and latitude of goal ---   #
 lon_goal = 42
@@ -84,7 +84,7 @@ if __name__ == '__main__':
 			run = pwm_control.Run()
 			run.stop()
 			print('Rover has reached the Goal !')
-
+			break
 
 	except KeyboardInterrupt:
 		run = pwm_control.Run()
@@ -95,3 +95,4 @@ if __name__ == '__main__':
 		run = pwm_control.Run()
 		run.stop()
 		GPS.colseGPS()
+		print('Finish !')
