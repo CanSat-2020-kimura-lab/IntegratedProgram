@@ -129,8 +129,8 @@ def calculate_angle_2D(magx,magy,magx_off,magy_off):
 		if magx-magx_off > 0 and magy-magy_off < 0: #Fourth quadrant
 			θ = 360 + θ #270 <= θ <= 360
 	
-	print('magx-magx_off = '+str(magx-magx_off))
-	print('magy-magy_off = '+str(magy-magy_off))
+	#print('magx-magx_off = '+str(magx-magx_off))
+	#print('magy-magy_off = '+str(magy-magy_off))
 	print('calculate:θ = '+str(θ))
 	#--- 0 <= θ <= 360 ---#
 	return θ
@@ -166,10 +166,10 @@ def calculate_direction(lon2,lat2):
 			lat1 = GPS_data[1]
 			lon1 = GPS_data[2]
 			print(GPS_data)
-			print("lat1 = "+str(lat1))
-			print("lon1 = "+str(lon1))
 			time.sleep(1)
 			if lat1 != -1.0 and lat1 != 0.0 :
+				print("lat1 = "+str(lat1))
+				print("lon1 = "+str(lon1))
 				break
 
 	except KeyboardInterrupt:
@@ -235,7 +235,7 @@ def rotate_control(θ,lon2,lat2):
 			run = pwm_control.Run()
 			run.stop()
 			time.sleep(0.5)
-		print("end")
+		#print("end")
 		print(θ)
 			
 
