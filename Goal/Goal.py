@@ -24,8 +24,8 @@ photo_path = '/home/pi/photo/phto'
 pi = pi.pigpio()
 
 #   --- longitude and latitude of goal ---   #
-lon_goal = 0
-lat_goal = 0
+lon_goal = 42
+lat_goal = 135
 
 #   --- Calculate the distance to the goal ---   #
 def distance_detection(lon_goal,lat_goal):
@@ -61,7 +61,7 @@ if __name__ == '__main__':
 		while distance <= 5.0:
 			goalflug = 1
 			while goalflug != 0:
-				goalflug, goalarea, goalGAP, photoname = GoalDetection("/home/pi/photo/photo",200 ,20, 80, 7000)
+				goalflug, goalarea, goalGAP, photoname = goaldetection.GoalDetection("/home/pi/photo/photo",200 ,20, 80, 7000)
 				print("goalflug", goalflug, "goalarea",goalarea, "goalGAP", goalGAP, "name", photoname)
 				if goalGAP <= -30.0:
 					print('Turn left')
@@ -86,12 +86,12 @@ if __name__ == '__main__':
 			print('Rover has reached the Goal !')
 
 
-	except:
-		run = Run()
+	except KeyboardInterrupt:
+		run = pwm_control.Run()
 		run.stop()
 		print('\r\t except, Run stop')
 
 	finally:
-		run = Run()
+		run = pwm_control.Run()
 		run.stop()
 		GPS.colseGPS()
