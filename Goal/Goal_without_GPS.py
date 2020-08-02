@@ -84,7 +84,7 @@ if __name__ == '__main__':
 			run = pwm_control.Run()
 			run.stop()
 			print('Rover has reached the Goal !')
-
+			break
 
 	except KeyboardInterrupt:
 		run = pwm_control.Run()
@@ -92,6 +92,7 @@ if __name__ == '__main__':
 		print('\r\t except, Run stop')
 
 	finally:
-		run = pwm_contrl.Run()
+		run = pwm_control.Run()
 		run.stop()
 		#GPS.colseGPS()
+		print('Finnish !')
