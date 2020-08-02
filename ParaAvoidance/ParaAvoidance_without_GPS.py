@@ -12,8 +12,8 @@ import traceback
 import numpy as np
 import cv2
 #--- original module ---#
-import GPS
-import gps_navigate
+#import GPS
+#import gps_navigate
 import Capture
 import ParaDetection
 import pwm_control
