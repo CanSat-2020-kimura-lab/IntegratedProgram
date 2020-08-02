@@ -60,32 +60,70 @@ def Parachute_area_judge(longitude_land,latitude_land):
 	distance = direction["distance"]        
 	return distance
 
-
 def Parachute_Avoidance(flug):
 	#--- There is Parachute arround rover ---#
 	if flug == 1:
 		#--- Avoid parachute by back control ---#
-		run = pwm_control.Run()
-		run.back()
-		time.sleep(1)
-		run.stop()
+		try:
+			#--- run back ---#
+			run = pwm_control.Run()
+			run.back()
+			time.sleep(0.5)
+
+		except KeyboardInterrupt:
+			run = pwm_control.Run()
+			run.stop()
+			time.sleep(1)
+
+		finally:
+			run = pwm_control.Run()
+			run.stop()
+			time.sleep(1)
+			print("back")
+
 		#--- Avoid parachute by rotate control ---#
 		while flug == 1:
-			run = pwm_control.Run()
-			run.turn_right_l()
-			time.sleep(1)
+			try:
+				#--- rotate ---#
+				run = pwm_control.Run()
+				run.turn_right_l()
+				time.sleep(1)
+
+			except KeyboardInterrupt:
+				run = pwm_control.Run()
+				run.stop()
+				time.sleep(1)
+
+			finally:
+				run = pwm_control.Run()
+				run.stop()
+				time.sleep(1)
 			#--- Parachute detect repeatedly and avoid it ---#
 			flug, area, photoname = ParaDetection.ParaDetection("/home/pi/photo/photo",320,240,200,10,120)
+			print("flug = "+str(flug))
 
 	#--- There is not Parachute arround rover ---#
 	if flug == 0:
-		run = pwm_control.Run()
-		run.straight_h()
-		time.sleep(1)
+		try:
+			#--- rotate ---#
+			run = pwm_control.Run()
+			run.straight_h()
+			time.sleep(0.5)
+
+		except KeyboardInterrupt:
+			run = pwm_control.Run()
+			run.stop()
+			time.sleep(1)
+
+		finally:
+			run = pwm_control.Run()
+			run.stop()
+			time.sleep(1)
 		#--- finish ---#
 
 if __name__ == '__main__':
 	GPS.openGPS()
+        TSL2561.tsl2561_setup()
 	print("START: Judge covered by Parachute")
 	#--- note GPS data at land point ---#
 	longitude_land,latitude_land = land_point_save()
@@ -102,6 +140,7 @@ if __name__ == '__main__':
 			break
 		t1 =time.time()
 		time.sleep(1)
+                print("rover is covered with parachute!")
 	print("START: Parachute avoidance")
 	while distance <= 5:
 		try:
