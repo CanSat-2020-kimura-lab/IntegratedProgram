@@ -19,7 +19,7 @@ import pwm_control
 import goaldetection
 
 #   --- path of photo ---   #
-photo_path = '/home/pi/photo/phto'
+photo_path = '/home/pi/photo/photo'
 
 pi = pigpio.pi()
 
