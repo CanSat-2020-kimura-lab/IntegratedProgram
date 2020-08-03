@@ -1,6 +1,7 @@
 import sys
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/BMX055')
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/GPS')
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Wireless')
 sys.path.append('/home/pi/git/kimuralab/Detection/Run_phase')
 #--- must be installed module ---#
 import matplotlib.pyplot as plt
@@ -13,6 +14,7 @@ import traceback
 from threading import Thread
 #--- original module ---#
 import BMX055 
+import IM920
 import pwm_control
 import GPS
 import gps_navigate
@@ -91,9 +93,9 @@ def calculate_offset(magdata):
 	magx_off = (magx_max + magx_min)/2
 	magy_off = (magy_max + magy_min)/2
 	magz_off = (magz_max + magz_min)/2
-	print("magx_off = "+str(magx_off))
-	print("magy_off = "+str(magy_off))
-	print("magz_off = "+str(magz_off))
+	#print("magx_off = "+str(magx_off))
+	#print("magy_off = "+str(magy_off))
+	#print("magz_off = "+str(magz_off))
 
 	return magx_array , magy_array , magz_array , magx_off , magy_off , magz_off
 
@@ -129,6 +131,10 @@ def calculate_angle_2D(magx,magy,magx_off,magy_off):
 		if magx-magx_off > 0 and magy-magy_off < 0: #Fourth quadrant
 			θ = 360 + θ #270 <= θ <= 360
 	
+	#--- Half turn  ---#
+	θ += 180
+	if θ >= 360:
+		θ -= 360
 	#print('magx-magx_off = '+str(magx-magx_off))
 	#print('magy-magy_off = '+str(magy-magy_off))
 	print('calculate:θ = '+str(θ))
@@ -166,10 +172,11 @@ def calculate_direction(lon2,lat2):
 			lat1 = GPS_data[1]
 			lon1 = GPS_data[2]
 			print(GPS_data)
+			IM920.Send(GPS_data)
+			#print("lat1 = "+str(lat1))
+			#print("lon1 = "+str(lon1))
 			time.sleep(1)
 			if lat1 != -1.0 and lat1 != 0.0 :
-				print("lat1 = "+str(lat1))
-				print("lon1 = "+str(lon1))
 				break
 
 	except KeyboardInterrupt:
@@ -185,16 +192,11 @@ def calculate_direction(lon2,lat2):
 	return direction
 
 def rotate_control(θ,lon2,lat2):
-	#--- Half turn  ---#
-	θ += 180
-	if θ >= 360:
-		θ -= 360
-
 	direction = calculate_direction(lon2,lat2)
 	azimuth = direction["azimuth1"]
 	#--- 0 <= azimuth <= 360 ---#
-	print('azimuth = '+str(azimuth))
-	print('θ = '+str(θ))
+	print('goal azimuth = '+str(azimuth))
+	#print('θ = '+str(θ))
 
 	try:
 
@@ -231,12 +233,12 @@ def rotate_control(θ,lon2,lat2):
 			if θ >= 360:
 				θ -= 360
 			#--- 0 <= θ <= 360 ---#		
-			print(θ)
+			print('θ = '+str(θ))
 			run = pwm_control.Run()
 			run.stop()
 			time.sleep(0.5)
-		#print("end")
-		print(θ)
+		print("rotate control finished")
+		#print(θ)
 			
 
 	except KeyboardInterrupt:
@@ -285,4 +287,3 @@ if __name__ == "__main__":
 		print("End")
 		run = pwm_control.Run()
 		run.stop()
-		
