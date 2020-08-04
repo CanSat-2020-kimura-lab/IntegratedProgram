@@ -238,10 +238,10 @@ def rotate_control(θ,lon2,lat2):
 			run.stop()
 			time.sleep(0.5)
 			if time.time() - t1 >= 60:
-				judge = 'Failed'
+				judge = False
 				break
 		print("rotate control finished")
-		judge = 'Successed'
+		judge = True
 		#print(θ)
 			
 
