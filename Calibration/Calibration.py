@@ -20,6 +20,7 @@ import GPS
 import gps_navigate
 
 GPS_data = [0.0,0.0,0.0,0.0,0.0]
+RX = 18
 
 def get_data():        
 	#--- get bmx055 data ---#
