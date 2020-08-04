@@ -172,7 +172,7 @@ def calculate_direction(lon2,lat2):
 			lat1 = GPS_data[1]
 			lon1 = GPS_data[2]
 			print(GPS_data)
-			IM920.Send(GPS_data)
+			IM920.Send(str(GPS_data))
 			#print("lat1 = "+str(lat1))
 			#print("lon1 = "+str(lon1))
 			time.sleep(1)
