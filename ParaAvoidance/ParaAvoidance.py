@@ -125,7 +125,7 @@ def Parachute_Avoidance(flug):
 
 if __name__ == '__main__':
 	GPS.openGPS()
-        TSL2561.tsl2561_setup()
+	TSL2561.tsl2561_setup()
 	print("START: Judge covered by Parachute")
 	#--- note GPS data at land point ---#
 	longitude_land,latitude_land = land_point_save()
@@ -142,7 +142,7 @@ if __name__ == '__main__':
 			break
 		t1 =time.time()
 		time.sleep(1)
-                print("rover is covered with parachute!")
+		print("rover is covered with parachute!")
 	print("START: Parachute avoidance")
 	while distance <= 5:
 		try:
