@@ -94,5 +94,5 @@ if __name__ == '__main__':
 	finally:
 		run = pwm_control.Run()
 		run.stop()
-		GPS.colseGPS()
+		GPS.closeGPS()
 		print('Finish !')
