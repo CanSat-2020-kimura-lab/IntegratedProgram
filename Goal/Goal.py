@@ -23,9 +23,9 @@ photo_path = '/home/pi/photo/photo'
 
 pi = pigpio.pi()
 
-#   --- longitude and latitude of goal ---   #
-lon_goal = 42
-lat_goal = 135
+#--- difine goal latitude and longitude ---#
+lon2 = 139.5430
+lat2 = 35.553
 
 #   --- Calculate the distance to the goal ---   #
 def distance_detection(lon_goal,lat_goal):
@@ -36,8 +36,8 @@ def distance_detection(lon_goal,lat_goal):
 			lat_now = value[1]
 			lon_now = value[2]
 			#print(value)
-			print('longitude = ' + str(lon_now))
-			print('latitude = ' + str(lat_now))
+			#print('longitude = ' + str(lon_now))
+			#print('latitude = ' + str(lat_now))
 			time.sleep(1)
 			#   --- break if the value is successfully acquired   --- #
 			if lat_new != -1.0 and lon_new != 0.0 :
