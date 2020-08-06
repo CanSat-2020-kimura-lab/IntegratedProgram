@@ -47,9 +47,9 @@ def Parachute_area_judge(longitude_land,latitude_land):
 			value = GPS.readGPS()
 			latitude_new = value[1]
 			longitude_new = value[2]
-			print(value)
-			print('longitude = '+str(longitude_new))
-			print('latitude = '+str(latitude_new))
+			#print(value)
+			#print('longitude = '+str(longitude_new))
+			#print('latitude = '+str(latitude_new))
 			time.sleep(1)
 			if latitude_new != -1.0 and longitude_new != 0.0 :
 				break
@@ -83,7 +83,7 @@ def Parachute_Avoidance(flug,t_start):
 			run = pwm_control.Run()
 			run.stop()
 			time.sleep(1)
-			print("back")
+			#print("back")
 
 		#--- Avoid parachute by rotate control ---#
 		while flug == 1:
