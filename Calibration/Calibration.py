@@ -23,6 +23,7 @@ import gps_navigate
 import Other
 
 GPS_data = [0.0,0.0,0.0,0.0,0.0]
+RX = 18
 
 Calibration_rotate_controlLog = '/home/pi/log/Calibration_rotate_controlLog.txt'
 
@@ -176,8 +177,8 @@ def calculate_direction(lon2,lat2):
 			GPS_data = GPS.readGPS()
 			lat1 = GPS_data[1]
 			lon1 = GPS_data[2]
-			print(GPS_data)
-			IM920.Send(GPS_data)
+			#print(GPS_data)
+			IM920.Send(str(GPS_data))
 			#print("lat1 = "+str(lat1))
 			#print("lon1 = "+str(lon1))
 			time.sleep(1)
