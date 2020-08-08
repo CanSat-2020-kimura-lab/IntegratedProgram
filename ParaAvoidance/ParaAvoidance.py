@@ -1,7 +1,7 @@
 import sys
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Camera')
-sys.path.append('/home/pi/git/kimuralab//SensorModuleTest/TSL2561')
-sys.path.append('/home/pi/git/kimuralab//SensorModuleTest/GPS')
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/TSL2561')
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/GPS')
 sys.path.append('/home/pi/git/kimuralab/Detection/Run_phase')
 sys.path.append('/home/pi/git/kimuralab/Detection/ParachuteDetection')
 sys.path.append('/home/pi/git/kimuralab/Other')
