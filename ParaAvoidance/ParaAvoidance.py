@@ -60,7 +60,7 @@ def Parachute_area_judge(longitude_land,latitude_land):
 	except:
 		GPS.closeGPS()
 		print (traceback.format_exc())
-	direction = gps_navigate.vincenty_inverse(longitude_land,latitude_land,longitude_new,latitude_new)
+	direction = gps_navigate.vincenty_inverse(latitude_land,longitude_land,latitude_new,longitude_new)
 	distance = direction["distance"]        
 	return distance
 
