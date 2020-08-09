@@ -56,7 +56,7 @@ def stuck_detection2(longitude_past,latitude_past):
 	except:
 		GPS.closeGPS()
 		print (traceback.format_exc())
-	direction = gps_navigate.vincenty_inverse(longitude_past,latitude_past,longitude_new,latitude_new)
+	direction = gps_navigate.vincenty_inverse(latitude_past,longitude_past,latitude_new,longitude_new)
 	distance = direction["distance"]        
 	return distance
 
