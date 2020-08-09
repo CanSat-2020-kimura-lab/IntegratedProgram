@@ -88,7 +88,6 @@ def Parachute_Avoidance(flug,t_start):
 
 		#--- Avoid parachute by rotate control ---#
 		while flug == 1:
-			print('Parachute Avoidance : There is not a Parachute')
 			try:
 				#--- rotate ---#
 				run = pwm_control.Run()
@@ -111,6 +110,7 @@ def Parachute_Avoidance(flug,t_start):
 
 	#--- There is not Parachute arround rover ---#
 	if flug == 0:
+		print('Parachute Avoidance : There is not a Parachute')
 		try:
 			#--- rotate ---#
 			run = pwm_control.Run()
