@@ -206,12 +206,12 @@ def rotate_control(θ,lon2,lat2,t_start):
 
 	try:
 		t1 = time.time()
-		while azimuth - 15 > θ  or θ > azimuth + 15:
-			if 0 <= azimuth < 15:
-				if azimuth -15 + 360 <= θ <= 360:
+		while azimuth - 30 > θ  or θ > azimuth + 30:
+			if 0 <= azimuth < 30:
+				if azimuth - 30 + 360 <= θ <= 360:
 					break
-			if 345 <= azimuth <= 360:
-				if 0 <= θ <= azimuth + 15 - 360:
+			if 330 <= azimuth <= 360:
+				if 0 <= θ <= azimuth + 30 - 360:
 					break
 			#--- use Timer ---#
 			global cond
