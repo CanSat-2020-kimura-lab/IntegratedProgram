@@ -67,6 +67,7 @@ def Parachute_area_judge(longitude_land,latitude_land):
 def Parachute_Avoidance(flug,t_start):
 	#--- There is Parachute arround rover ---#
 	if flug == 1:
+		print('Parachute Avoidance : There is a Parachute')
 		#--- Avoid parachute by back control ---#
 		try:
 			#--- run back ---#
@@ -87,11 +88,12 @@ def Parachute_Avoidance(flug,t_start):
 
 		#--- Avoid parachute by rotate control ---#
 		while flug == 1:
+			print('Parachute Avoidance : There is not a Parachute')
 			try:
 				#--- rotate ---#
 				run = pwm_control.Run()
 				run.turn_right_l()
-				time.sleep(1)
+				time.sleep(0.1)
 
 			except KeyboardInterrupt:
 				run = pwm_control.Run()
