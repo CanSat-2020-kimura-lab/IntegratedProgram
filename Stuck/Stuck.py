@@ -66,6 +66,7 @@ def stuck_escape():
 	#--- run back and change direction ---#
 	try:
 		#--- run back ---#
+		print("Stuck//back")
 		run = pwm_control.Run()
 		run.back()
 		time.sleep(2)
@@ -79,9 +80,9 @@ def stuck_escape():
 		run = pwm_control.Run()
 		run.stop()
 		time.sleep(2)
-		print("Stuck//back")
 
 	try:
+		print("Stuck//turn right")
 		#--- change direction ---#
 		run = pwm_control.Run()
 		run.turn_right()
@@ -96,7 +97,6 @@ def stuck_escape():
 		run = pwm_control.Run()
 		run.stop()
 		time.sleep(2)
-		print("Stuck//turn right")
 
 def timer(t):
 	global cond
