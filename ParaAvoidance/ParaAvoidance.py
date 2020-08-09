@@ -115,7 +115,7 @@ def Parachute_Avoidance(flug,t_start):
 			#--- rotate ---#
 			run = pwm_control.Run()
 			run.straight_h()
-			time.sleep(1)
+			time.sleep(2)
 
 		except KeyboardInterrupt:
 			run = pwm_control.Run()
