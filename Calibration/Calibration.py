@@ -181,7 +181,7 @@ def calculate_direction(lon2,lat2):
 			IM920.Send(str(GPS_data))
 			#print("lat1 = "+str(lat1))
 			#print("lon1 = "+str(lon1))
-			time.sleep(1)
+			time.sleep(0.5)
 			if lat1 != -1.0 and lat1 != 0.0 :
 				break
 
