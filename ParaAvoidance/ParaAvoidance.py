@@ -87,12 +87,12 @@ def Parachute_Avoidance(flug,t_start):
 			#print("back")
 
 		#--- Avoid parachute by rotate control ---#
-		while flug == 1:
+		while flug == 1 or flug == -1:
 			try:
 				#--- rotate ---#
 				run = pwm_control.Run()
 				run.turn_right_l()
-				time.sleep(0.1)
+				time.sleep(0.5)
 
 			except KeyboardInterrupt:
 				run = pwm_control.Run()
