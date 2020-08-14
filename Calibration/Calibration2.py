@@ -221,6 +221,8 @@ def rotate_control(θ,lon2,lat2,t_start):
 			while cond:
 				run = pwm_control.Run()
 				run.turn_right_l()
+			#--- back to stop ---#
+			run.back(0.2)
 			get_data()
 			θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
 			#--- -90 <= θ <= 90 ---#
@@ -247,7 +249,7 @@ def rotate_control(θ,lon2,lat2,t_start):
 			if time.time() - t1 >= 60:
 				judge = False
 				break
-			else:
+                        else:
 				judge = True
 		print("rotate control finished")
 		#print(θ)
