@@ -29,7 +29,7 @@ def land_point_save():
 			value = GPS.readGPS()
 			latitude_land = value[1]
 			longitude_land = value[2]
-			time.sleep(1)
+			time.sleep(0.5)
 			if latitude_land != -1.0 and longitude_land != 0.0 :
 				break
 	except KeyboardInterrupt:
