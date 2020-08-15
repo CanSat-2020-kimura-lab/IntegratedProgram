@@ -26,10 +26,10 @@ ParaAvoidanceLog = '/home/pi/log/ParaAvoidanceLog.txt'
 def land_point_save():
 	try:
 		while True:
-			value = GPS.readGPS()
-			latitude_land = value[1]
-			longitude_land = value[2]
-			time.sleep(0.5)
+			GPS_value = GPS.readGPS()
+			latitude_land = GPS_value[1]
+			longitude_land = GPS_value[2]
+			#time.sleep(0.5)
 			if latitude_land != -1.0 and longitude_land != 0.0 :
 				break
 	except KeyboardInterrupt:
