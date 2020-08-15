@@ -60,9 +60,9 @@ def magdata_matrix():
 		global magdata
 		magdata = np.array([[magx,magy,magz]])
 		#time.sleep(0.5)
-		for i in range(30):
+		for i in range(50):
 			run = pwm_control.Run()
-			run.turn_right()
+			run.turn_right_h()
 			get_data()
 			#--- multi dimention matrix ---#
 			magdata = np.append(magdata , np.array([[magx,magy,magz]]) , axis = 0)
@@ -181,7 +181,7 @@ def calculate_direction(lon2,lat2):
 			IM920.Send(str(GPS_data))
 			#print("lat1 = "+str(lat1))
 			#print("lon1 = "+str(lon1))
-			time.sleep(1)
+			#time.sleep(1)
 			if lat1 != -1.0 and lat1 != 0.0 :
 				break
 
@@ -220,10 +220,7 @@ def rotate_control(θ,lon2,lat2,t_start):
 			thread.start()
 			while cond:
 				run = pwm_control.Run()
-				run.turn_right_l()
-			#--- back to stop ---#
-			run.back()
-			time.sleep(0.2)
+				run.turn_right()
 			get_data()
 			θ = math.degrees(math.atan((magy-magy_off)/(magx-magx_off)))
 			#--- -90 <= θ <= 90 ---#
@@ -248,10 +245,10 @@ def rotate_control(θ,lon2,lat2,t_start):
 			run.stop()
 			time.sleep(0.5)
 			if time.time() - t1 >= 60:
-				judge = False
+				#judge = False
+                                print('rotate control timeout')
 				break
-			else:
-				judge = True
+		#judge = True
 		print("rotate control finished")
 		#print(θ)
 			
@@ -320,4 +317,4 @@ if __name__ == "__main__":
 		run = pwm_control.Run()
 		run.stop()
 
-#---停止時に反転動作を入れた---#
+#---遅いモーター用---#
