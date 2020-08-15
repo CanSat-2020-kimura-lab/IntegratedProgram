@@ -60,7 +60,7 @@ def magdata_matrix():
 		global magdata
 		magdata = np.array([[magx,magy,magz]])
 		#time.sleep(0.5)
-		for i in range(30):
+		for i in range(50):
 			run = pwm_control.Run()
 			run.turn_right()
 			get_data()
@@ -245,7 +245,8 @@ def rotate_control(θ,lon2,lat2,t_start):
 			run.stop()
 			time.sleep(0.5)
 			if time.time() - t1 >= 60:
-				judge = False
+				#judge = False
+				print('rotate control timeout')
 				break
 		print("rotate control finished")
 		judge = True
