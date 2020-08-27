@@ -26,8 +26,46 @@ GPS_data = [0.0,0.0,0.0,0.0,0.0]
 RX = 18
 
 Calibration_rotate_controlLog = '/home/pi/log/Calibration_rotate_controlLog.txt'
-
+'''
 def get_data():
+	#--- get bmx055 data ---#
+	try:
+		bmxData = BMX055.bmx055_read()
+		#time.sleep(0.2)
+		#--- get acceralate sensor data ---#
+		global accx,accy,accz
+		accx = bmxData[0]
+		accy = bmxData[1]
+		accz = bmxData[2]
+		while accx == 0:
+			bmxData = BMX055.bmx055_read()
+			accx = bmxData[0]
+			accy = bmxData[1]
+
+	except KeyboardInterrupt:
+		print()
+	
+	except Exception as e:
+		print()
+		print(e)
+
+	#--- get magnet sensor data ---#
+	global magx,magy,magz
+	magx = bmxData[6]
+	magy = bmxData[7]
+	magz = bmxData[8]
+	
+	#--- compensate magdata ---#
+	θr = atan(accy/accx)
+	θp = atan(accx/(sqrt(accy**2 + accz**2)))
+
+	magx = magx*cos(θp) + magy*sin(θr)*sin(θp) + magz*cos(θr)*sin(θp)
+	magy = magy*cos(θr) - magz*sin(θr)
+	magz = magx*(-sin(θp)) + magy*sin(θr)*cos(θp) + magz*cos(θr)*cos(θp)
+
+	return magx , magy , magz , accx , accy , accz
+'''
+def get_data():        
 	#--- get bmx055 data ---#
 	try:
 		bmxData = BMX055.bmx055_read()
@@ -51,15 +89,6 @@ def get_data():
 	magx = bmxData[6]
 	magy = bmxData[7]
 	magz = bmxData[8]
-	
-	#--- compensate magdata ---#
-	θr = atan(accy/accx)
-	θp = atan(accx/(sqrt(accy**2 + accz**2)))
-
-	magx = magx*cos(θp) + magy*sin(θr)*sin(θp) + magz*cos(θr)*sin(θp)
-	magy = magy*cos(θr) - magz*sin(θr)
-	magz = magx*(-sin(θp)) + magy*sin(θr)*cos(θp) + magz*cos(θr)*cos(θp)
-
 	return magx , magy , magz , accx , accy , accz
 
 def get_magdata_average():
@@ -229,28 +258,29 @@ def rotate_control(θ,azimuth,t_start):
 			if azimuth < 180:
 				if azimuth < θ < azimuth + 180:
 					run = pwm_control.Run()
-					run.turn_right()
+					run.turn_right_l()
 					time.sleep(1)
 				else: #-- 0 < θ < azimuth or azimuth + 180 < θ < 360 --#
 					run = pwm_control.Run()
-					run.turn_left()
+					run.turn_left_l()
 					time.sleep(1)
 			else: #-- 180 < azimuth  --#
 				if azimuth - 180 < θ < azimuth:
 					run = pwm_control.Run()
-					run.turn_left()
+					run.turn_left_l()
 					time.sleep(1)
 				else: #-- 0 < θ < azimuth - 180 or azimuth < θ < 360 --#
 					run = pwm_control.Run()
-					run.turn_right()
+					run.turn_right_l()
 					time.sleep(1)
 
 			#run = pwm_control.Run()
 			#run.stop()
 			#time.sleep(0.5)
 
-			get_magdata_average()
-			θ = calculate_angle_2D(magx_average,magy_average,magx_off,magy_off)
+			#get_magdata_average()
+			get_data()
+			θ = calculate_angle_2D(magx,magy,magx_off,magy_off)
 			Other.saveLog(Calibration_rotate_controlLog, 'Calibration_rotate_control', time.time() - t_start, θ, azimuth)
 
 			if time.time() - timeout_count >= 60:
