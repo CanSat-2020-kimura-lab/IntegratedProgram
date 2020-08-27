@@ -296,8 +296,9 @@ def rotate_control(θ,azimuth,t_start):
 		print("faulted to rotate control to goal direction")                
 		
 	finally:
-		run = pwm_control.Run()
-		run.stop()
+		#run = pwm_control.Run()
+		#run.stop()
+		pass
 
 def plot_data_2D(magx_array,magy_array):
 	plt.scatter(magx_array,magy_array,label ="Calibration")
